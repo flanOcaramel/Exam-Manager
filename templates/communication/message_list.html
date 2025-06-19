@@ -1,0 +1,15 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h3>Messages reçus</h3>
+    <ul class="list-group">
+        {% for message in messages %}
+        <li class="list-group-item">
+            <strong>{{ message.sender }}</strong> : {{ message.content }} <span class="text-muted">({{ message.timestamp }})</span>
+        </li>
+        {% empty %}
+        <li class="list-group-item">Aucun message.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

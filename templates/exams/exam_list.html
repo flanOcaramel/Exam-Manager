@@ -1,0 +1,49 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h3>Liste des Épreuves</h3>
+    {% if exams|length == 0 %}
+        <div class="alert alert-info">Aucune épreuve disponible dans cette catégorie.</div>
+    {% endif %}
+    {% if user.is_superuser %}
+        <div class="mb-3 text-end">
+            <a href="{% url 'exam_create' %}" class="btn btn-primary">Créer un événement</a>
+        </div>
+    {% endif %}
+    <table class="table table-bordered table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>Titre</th>
+                <th>Promotion</th>
+                <th>Date</th>
+                <th>Horaire</th>
+                <th>Salle/Amphi</th>
+                <th>Enseignants requis</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for exam in exams %}
+            <tr>
+                <td>{{ exam.titre }}</td>
+                <td>{{ exam.promotion|default:"-" }}</td>
+                <td>{{ exam.exam_date|date:"d/m/Y" }}</td>
+                <td>{{ exam.exam_date|date:"H:i" }} ({{ exam.duration }})</td>
+                <td>{{ exam.subject }}</td>
+                <td>{{ exam.teachers_needed|default:exam.required_teachers_count }} restant(s)</td>
+                <td>
+                    {% if exam.id in user_exam_ids %}
+                        <span class="text-success">Inscrit</span>
+                        <a href="{% url 'cancel_participation' exam.id %}" class="btn btn-danger btn-sm ms-2">Annuler</a>
+                    {% elif exam.num_part < exam.required_teachers_count %}
+                        <a href="{% url 'participate_exam' exam.id %}" class="btn btn-success btn-sm">S'inscrire</a>
+                    {% else %}
+                        <span class="text-muted">Complet</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

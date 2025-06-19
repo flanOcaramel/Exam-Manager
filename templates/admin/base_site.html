@@ -1,0 +1,13 @@
+{% extends "admin/base.html" %}
+{% block header %}
+    {{ block.super }}
+    {% if request.user.is_superuser %}
+        <a class="button" style="position:absolute;top:50px;right:10px;padding:10px 24px;background:#28a745;color:#fff;border-radius:6px;text-decoration:none;font-size:1.1em;z-index:1000;" href="/admin-csv/">⬇️ Export Excel</a>
+    {% endif %}
+{% endblock %}
+{% block content %}
+    {% if custom_export_button %}
+        {{ custom_export_button|safe }}
+    {% endif %}
+    {{ block.super }}
+{% endblock %}

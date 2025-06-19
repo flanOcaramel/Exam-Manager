@@ -1,0 +1,53 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h3>Liste des Séances de Docimologie</h3>
+    <table class="table table-bordered table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>Date de la réunion</th>
+                <th>Heure de la réunion</th>
+                <th>Distanciel</th>
+                <th>Salle de la réunion</th>
+                <th>Spécialité concernée</th>
+                <th>Responsable n°1</th>
+                <th>Responsable n°2</th>
+                <th>Quantité de questions</th>
+                <th>Programme de la séance</th>
+                <th>Date de l'examen</th>
+                <th>Professeurs requis</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for session in sessions %}
+            <tr>
+                <td>{{ session.date|date:"d/m/Y" }}</td>
+                <td>{{ session.date|date:"H:i" }}</td>
+                <td>{% if session.is_distanciel %}Oui{% else %}Non{% endif %}</td>
+                <td>{{ session.salle }}</td>
+                <td>{{ session.specialite }}</td>
+                <td>{% if session.responsable1 %}{{ session.responsable1.get_full_name|default:session.responsable1.username }}{% else %}-{% endif %}</td>
+                <td>{% if session.responsable2 %}{{ session.responsable2.get_full_name|default:session.responsable2.username }}{% else %}-{% endif %}</td>
+                <td>{{ session.nb_questions }}</td>
+                <td>{{ session.programme }}</td>
+                <td>{{ session.date_examen|date:"d/m/Y" }}</td>
+                <td>{{ session.teachers_needed|default:session.required_teachers_count }} restant(s)</td>
+                <td>
+                    {% if session.id in user_session_ids %}
+                        <span class="text-success">Inscrit</span>
+                        <a href="{% url 'cancel_session_participation' session.id %}" class="btn btn-danger btn-sm ms-2">Annuler</a>
+                    {% elif session.teachers_needed|default:session.required_teachers_count > 0 %}
+                        <a href="{% url 'participate_session' session.id 'responsable' %}" class="btn btn-success btn-sm">S'inscrire</a>
+                    {% else %}
+                        <span class="text-muted">Complet</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="12">Aucune séance disponible.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

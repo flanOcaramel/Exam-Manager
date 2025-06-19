@@ -1,0 +1,15 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h3>Informations Utiles</h3>
+    <ul class="list-group">
+        {% for info in infos %}
+        <li class="list-group-item">
+            <strong>{{ info.title }}</strong> : {{ info.content }} <span class="text-muted">(MAJ {{ info.updated_at }})</span>
+        </li>
+        {% empty %}
+        <li class="list-group-item">Aucune information utile pour le moment.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

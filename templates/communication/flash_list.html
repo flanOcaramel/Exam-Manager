@@ -1,0 +1,15 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h3>Messages Flash</h3>
+    <ul class="list-group">
+        {% for flash in flashes %}
+        <li class="list-group-item">
+            {{ flash.message }} <span class="text-muted">({{ flash.created_at }})</span>
+        </li>
+        {% empty %}
+        <li class="list-group-item">Aucun message flash.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
