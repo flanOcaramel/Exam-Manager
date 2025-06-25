@@ -12,15 +12,21 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'your-secret-key'
+# Charger les variables d'environnement depuis le fichier .env
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
-DEBUG = False
+SECRET_KEY = os.getenv('SECRET_KEY', 'your-secret-key')
 
-ALLOWED_HOSTS = ['cbs-timer.cbs.site.univ-lorraine.fr']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1')
+
+ALLOWED_HOSTS = ['*']
+
+print("ALLOWED_HOSTS =", ALLOWED_HOSTS)
+STATIC_ROOT = os.getenv('STATIC_ROOT', BASE_DIR / 'staticfiles')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -66,8 +72,12 @@ WSGI_APPLICATION = 'exam_manager.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.getenv('DB_NAME', BASE_DIR / 'db.sqlite3'),
+        'USER': os.getenv('DB_USER', ''),
+        'PASSWORD': os.getenv('DB_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', ''),
+        'PORT': os.getenv('DB_PORT', ''),
     }
 }
 
@@ -101,3 +111,9 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGOUT_REDIRECT_URL = '/login/'
+
+EMAIL_HOST = os.getenv('EMAIL_HOST', '')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True').lower() in ('true', '1')

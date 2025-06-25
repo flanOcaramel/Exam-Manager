@@ -5,7 +5,7 @@
 # Variables à adapter
 PROJECT_DIR="$HOME/Documents/GitHub/exam_manager"
 VENV_DIR="$PROJECT_DIR/.venv"
-DJANGO_SETTINGS_MODULE="www.data.exam_manager.settings"
+DJANGO_SETTINGS_MODULE="exam_manager.settings"
 DOMAIN="cbs-timer.cbs.site.univ-lorraine.fr"
 GUNICORN_PORT=8001
 STATIC_ROOT="$PROJECT_DIR/staticfiles"
